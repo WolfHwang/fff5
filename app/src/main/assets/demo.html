@@ -1,0 +1,72 @@
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <title>
+        js调用java
+    </title>
+</head>
+
+<body>
+<p>
+    <xmp id="show">
+    </xmp>
+</p>
+<p>
+    <xmp id="init">
+    </xmp>
+</p>
+
+<p>
+    <input type="button" id="enter" value="打开返回按钮" onclick="openBackIcon();"
+    />
+</p>
+<p>
+    <input type="button" id="enter1" value="关闭返回按钮" onclick="closeBackIcon();"
+    />
+</p>
+
+</body>
+<script>
+        function openBackIcon() {
+            window.WebViewJavascriptBridge.callHandler(
+                'openBackIcon'
+                , {'param': '提供原生端需要的参数'}
+                , function(responseData) {
+                }
+            );
+        }
+
+          function closeBackIcon() {
+            window.WebViewJavascriptBridge.callHandler(
+                'closeBackIcon'
+                , {'param': '提供原生端需要的参数'}
+                , function(responseData) {
+                }
+            );
+        }
+
+        function connectWebViewJavascriptBridge(callback) {
+            if (window.WebViewJavascriptBridge) {
+                callback(WebViewJavascriptBridge)
+            } else {
+                document.addEventListener(
+                    'WebViewJavascriptBridgeReady'
+                    , function() {
+                        callback(WebViewJavascriptBridge)
+                    },
+                    false
+                );
+            }
+        }
+
+        connectWebViewJavascriptBridge(function(bridge) {
+            bridge.registerHandler("listenBackIconClick", function(data, responseCallback) {
+                document.getElementById("show").innerHTML = ("data from Java: = " + data);
+            });
+        })
+
+
+</script>
+
+</html>
+
